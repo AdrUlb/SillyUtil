@@ -1,15 +1,14 @@
 using System.Diagnostics.Contracts;
 using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
 
 namespace SillyUtil.Extensions;
 
 public static class ValueTypeExtensions
 {
-	extension<T>(ref T self) where T : unmanaged
+	extension<T>(ref T self) where T : struct
 	{
 		[Pure]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public Span<byte> AsBytes() => MemoryMarshal.AsBytes(new Span<T>(ref self));
+		public Span<T> AsSpan() => new(ref self);
 	}
 }
