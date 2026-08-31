@@ -8,7 +8,8 @@ public static class StreamExtensions
 	extension(Stream self)
 	{
 		public Stream SubStream(long offset, long length, bool canWrite = true) => new SubStream(self, offset, length, canWrite);
-		
+
+		[SkipLocalsInit]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public byte ReadUInt8()
 		{
@@ -20,6 +21,7 @@ public static class StreamExtensions
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public sbyte ReadInt8() => (sbyte)self.ReadUInt8();
 
+		[SkipLocalsInit]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public ushort ReadUInt16LittleEndian()
 		{
@@ -28,6 +30,7 @@ public static class StreamExtensions
 			return BinaryPrimitives.ReadUInt16LittleEndian(buf);
 		}
 
+		[SkipLocalsInit]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public uint ReadUInt32LittleEndian()
 		{
@@ -36,6 +39,7 @@ public static class StreamExtensions
 			return BinaryPrimitives.ReadUInt32LittleEndian(buf);
 		}
 
+		[SkipLocalsInit]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public ulong ReadUInt64LittleEndian()
 		{
@@ -53,6 +57,7 @@ public static class StreamExtensions
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public long ReadInt64LittleEndian() => (long)self.ReadUInt64LittleEndian();
 
+		[SkipLocalsInit]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public ushort ReadUInt16BigEndian()
 		{
@@ -61,6 +66,7 @@ public static class StreamExtensions
 			return BinaryPrimitives.ReadUInt16BigEndian(buf);
 		}
 
+		[SkipLocalsInit]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public uint ReadUInt32BigEndian()
 		{
@@ -69,6 +75,7 @@ public static class StreamExtensions
 			return BinaryPrimitives.ReadUInt32BigEndian(buf);
 		}
 
+		[SkipLocalsInit]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public ulong ReadUInt64BigEndian()
 		{
