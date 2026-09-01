@@ -28,7 +28,9 @@ public ref struct ArrayPoolLease<T> : IDisposable
 	{
 		var oldSize = Span.Length;
 
-		_pool.Resize(ref _array, size, ReturnClear);
+		if (_array == null || _array.Length < size)
+			_pool.Resize(ref _array, size, ReturnClear);
+
 		Span = _array.AsSpan(0, size);
 
 		if (clearNewSpace && size > oldSize)
