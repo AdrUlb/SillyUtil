@@ -3,23 +3,22 @@ using System.Runtime.CompilerServices;
 
 namespace SillyUtil;
 
-public ref struct SpanReader(Span<byte> span)
+public ref struct SpanReader(ReadOnlySpan<byte> span)
 {
-	public Span<byte> Span { get; private set; } = span;
+	public ReadOnlySpan<byte> Span { get; private set; } = span;
+	public int Position { get; set; } = 0;
 
-	public Span<byte> ReadBytes(int count)
+	public ReadOnlySpan<byte> ReadBytes(int count)
 	{
-		var ret = Span[..count];
-		Span = Span[count..];
+		var ret = Span.Slice(Position, count);
+		Position += count;
 		return ret;
 	}
-	
+
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public byte ReadUInt8()
 	{
-		var ret = Span[0];
-		Span = Span[1..];
-		return ret;
+		return Span[Position++];
 	}
 
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -28,24 +27,48 @@ public ref struct SpanReader(Span<byte> span)
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public ushort ReadUInt16LittleEndian()
 	{
-		var ret = BinaryPrimitives.ReadUInt16LittleEndian(Span);
-		Span = Span[2..];
+		var ret = BinaryPrimitives.ReadUInt16LittleEndian(Span[Position..]);
+		Position += 2;
+		return ret;
+	}
+
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public ushort ReadUInt16BigEndian()
+	{
+		var ret = BinaryPrimitives.ReadUInt16BigEndian(Span[Position..]);
+		Position += 2;
 		return ret;
 	}
 
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public uint ReadUInt32LittleEndian()
 	{
-		var ret = BinaryPrimitives.ReadUInt32LittleEndian(Span);
-		Span = Span[4..];
+		var ret = BinaryPrimitives.ReadUInt32LittleEndian(Span[Position..]);
+		Position += 4;
+		return ret;
+	}
+
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public uint ReadUInt32BigEndian()
+	{
+		var ret = BinaryPrimitives.ReadUInt32BigEndian(Span[Position..]);
+		Position += 4;
 		return ret;
 	}
 
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public ulong ReadUInt64LittleEndian()
 	{
-		var ret = BinaryPrimitives.ReadUInt64LittleEndian(Span);
-		Span = Span[8..];
+		var ret = BinaryPrimitives.ReadUInt64LittleEndian(Span[Position..]);
+		Position += 8;
+		return ret;
+	}
+
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public ulong ReadUInt64BigEndian()
+	{
+		var ret = BinaryPrimitives.ReadUInt64BigEndian(Span[Position..]);
+		Position += 8;
 		return ret;
 	}
 
@@ -57,30 +80,6 @@ public ref struct SpanReader(Span<byte> span)
 
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public long ReadInt64LittleEndian() => (long)ReadUInt64LittleEndian();
-
-	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public ushort ReadUInt16BigEndian()
-	{
-		var ret = BinaryPrimitives.ReadUInt16BigEndian(Span);
-		Span = Span[2..];
-		return ret;
-	}
-
-	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public uint ReadUInt32BigEndian()
-	{
-		var ret = BinaryPrimitives.ReadUInt32BigEndian(Span);
-		Span = Span[4..];
-		return ret;
-	}
-
-	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public ulong ReadUInt64BigEndian()
-	{
-		var ret = BinaryPrimitives.ReadUInt64BigEndian(Span);
-		Span = Span[8..];
-		return ret;
-	}
 
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public short ReadInt16BigEndian() => (short)ReadUInt16BigEndian();
